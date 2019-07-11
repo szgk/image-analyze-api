@@ -1,4 +1,4 @@
-from .Image import Image
+from src.modules.Image import Image
 import collections, math
 from ..Constants import COLOR_NAMES
 

@@ -3,7 +3,7 @@ from selenium.webdriver.chrome.options import Options
 # use chromedriver(ver74)
 import os, chromedriver_binary
 
-from ..modules import String
+from src.modules import String
 
 class WebSite:
   """

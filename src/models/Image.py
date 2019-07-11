@@ -1,7 +1,7 @@
 import os
 
-from ..modules.Image import Image as ImageModule
-from ..modules.Colors import Colors
+from src.modules.Image import Image as ImageModule
+from src.modules.Colors import Colors
 
 class Image:
   """

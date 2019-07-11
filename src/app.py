@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 # use chrome_driver(ver74)
 # import chromedriver_binary
-import os, datetime, json
+import os, datetime, json, urllib
 
 from src.models import WebSite, Image
 from src.modules.Colors import Colors
@@ -25,6 +25,8 @@ def get_website_screenshot():
   """
   if request.method == 'GET':
     url = request.args.get('url')
+    print(url)
+    url = urllib.parse.unquote(url)
     print(url)
     webSite = WebSite(url, app.root_path)
     image = webSite.get_screenshot_base64()

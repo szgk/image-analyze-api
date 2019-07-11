@@ -12,6 +12,11 @@ from .modules.Colors import Colors
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+@app.route('/', methods=['GET'])
+@cross_origin()
+def hello():
+    return 'hello'
+
 @app.route('/api/website/screenshot', methods=['GET'])
 @cross_origin()
 def get_website_screenshot():

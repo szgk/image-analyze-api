@@ -1,5 +1,6 @@
 astroid==1.6.5
 autopep8==1.4
+chromedriver-binary==76.0.3809.25.0
 Click==7.0
 flake8==3.6.0
 Flask==1.1.1

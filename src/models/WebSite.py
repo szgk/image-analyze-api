@@ -37,11 +37,24 @@ class WebSite:
 
   def _get_screenshot(self):
     options = Options()
-    options.binary_location = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+
+    # local
+    # options.binary_location = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+
+    # heroku
+    options.binary_location = '/app/.apt/usr/bin/google-chrome'
+
     options.add_argument('--headless')
-    driver_path = os.path.join(self._currentpath, ("../drivers/chromedriver"))
-    driver = webdriver.Chrome(chrome_options=options, executable_path=driver_path)
+
+    # local
+    # driver_path = os.path.join(self._currentpath, ("../drivers/chromedriver"))
+    # driver = webdriver.Chrome(chrome_options=options, executable_path=driver_path)
+
+    # heroku
+    options.add_argument('--disable-gpu')
+    driver = webdriver.Chrome(chrome_options=options)
     driver.get(self._url)
+
     # get full page size
     page_width = driver.execute_script('return document.body.scrollWidth')
     page_height = driver.execute_script('return document.body.scrollHeight')

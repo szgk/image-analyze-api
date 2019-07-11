@@ -1,7 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 # use chromedriver(ver74)
-import os, chromedriver_binary
+# import os, chromedriver_binary
+import os
 
 from src.modules import String
 

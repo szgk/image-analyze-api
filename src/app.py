@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 # use chrome_driver(ver74)
-import chromedriver_binary
+# import chromedriver_binary
 import os, datetime, json
 
 from src.models import WebSite, Image

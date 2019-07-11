@@ -6,8 +6,8 @@ from selenium.webdriver.chrome.options import Options
 import chromedriver_binary
 import os, datetime, json
 
-from .models import WebSite, Image
-from .modules.Colors import Colors
+from src.models import WebSite, Image
+from src.modules.Colors import Colors
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})

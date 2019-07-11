@@ -1,6 +1,6 @@
 from src.modules.Image import Image
 import collections, math
-from ..Constants import COLOR_NAMES
+from src.Constants import COLOR_NAMES
 
 class Colors():
   """

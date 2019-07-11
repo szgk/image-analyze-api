@@ -1,0 +1,6 @@
+venv
+.vscode
+src/static/img/
+node_modules
+__pycache__
+src/static/js/

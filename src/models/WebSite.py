@@ -10,7 +10,7 @@ if app.config['ENV'] == 'production':
   from src.modules import FireStore
   from src.modules import Image
   from src.modules import String
-  from src.CloudStorage import CloudStorage
+  from src.modules import CloudStorage
   from src.modules import WebSite as WebSiteModule
 elif app.config['ENV'] == 'development':
   app.config.from_pyfile('../configs/dev.cfg')

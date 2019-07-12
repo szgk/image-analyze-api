@@ -1,7 +1,15 @@
-import os
+from flask import Flask
+app = Flask(__name__)
 
-from src.modules.Image import Image as ImageModule
-from src.modules.Colors import Colors
+import os
+if app.config['ENV'] == 'production':
+  from src.modules.Image import Image as ImageModule
+  from src.modules.Colors import Colors
+elif app.config['ENV'] == 'development':
+  from ..modules import Image as ImageModule
+  from ..modules import Colors
+else:
+  print('Invalid ENV')
 
 class Image:
   """

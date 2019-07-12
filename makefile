@@ -1,9 +1,10 @@
 VER=75
 
-build:
-	sh shell/build.sh && make driver VER=74
+init:
+	sh shell/init.sh && make driver VER=74
 
 dev:
+	export FLASK_ENV=development
 	sh shell/up.sh DEV=1
 
 update:

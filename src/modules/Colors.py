@@ -1,6 +1,17 @@
-from src.modules.Image import Image
+from flask import Flask
 import collections, math
-from src.Constants import COLOR_NAMES
+
+app = Flask(__name__)
+
+import os
+if app.config['ENV'] == 'production':
+  from src.modules.Image import Image
+  from src.Constants import COLOR_NAMES
+elif app.config['ENV'] == 'development':
+  from .Image import Image
+  from ..Constants import COLOR_NAMES
+else:
+  print('Invalid ENV')
 
 class Colors():
   """

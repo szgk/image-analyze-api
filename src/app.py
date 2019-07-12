@@ -2,15 +2,24 @@ from flask import Flask, render_template, request, redirect, jsonify, make_respo
 from flask_cors import CORS, cross_origin
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-# use chrome_driver(ver74)
-# import chromedriver_binary
-import os, datetime, json, urllib
-
-from src.models import WebSite, Image
-from src.modules.Colors import Colors
-
+import os, datetime, json, urllib, sys
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+if app.config['ENV'] == 'production':
+  app.config.from_pyfile('configs/prod.cfg')
+  from src.models import Image
+  from src.modules import Colors
+  from src.modules import WebSite
+elif app.config['ENV'] == 'development':
+  app.config.from_pyfile('configs/dev.cfg')
+  from .models import Image
+  from .modules import Colors
+  from .modules import WebSite
+  # use chrome_driver(ver74)
+  import chromedriver_binary
+else:
+  print('Invalid ENV')
 
 @app.route('/', methods=['GET'])
 @cross_origin()
@@ -21,17 +30,17 @@ def hello():
 @cross_origin()
 def get_website_screenshot():
   """
-  endpoint to create screenshot of website.
+  endpoint to get screenshot as base64.
   """
+  print(app.config['ENV'], file=sys.stderr)
   if request.method == 'GET':
     url = request.args.get('url')
-    print(url)
     url = urllib.parse.unquote(url)
-    print(url)
-    webSite = WebSite(url, app.root_path)
-    image = webSite.get_screenshot_base64()
 
-    return jsonify({'image': image})
+    webSite = WebSite()
+    webSite.get_screenshot_base64(url)
+
+    return jsonify({'status': 'start'})
 
 @app.route('/api/image/colors', methods=['POST'])
 @cross_origin()

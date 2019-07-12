@@ -1,3 +1,4 @@
-from . import Image
 from . import String
-from . import Colors
+from .Image import Image
+from .Colors import Colors
+from .WebSite import WebSite

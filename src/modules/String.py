@@ -8,7 +8,7 @@ import re
 import datetime
 
 def current_time():
-  return datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+  return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 def get_page_name(url):
   """
@@ -19,4 +19,5 @@ def get_page_name(url):
   page_name = parsed_url.netloc
   if(path_name != '-'):
     page_name = parsed_url.netloc + '-' + path_name
-  return page_name
+
+  return page_name.rstrip('-')

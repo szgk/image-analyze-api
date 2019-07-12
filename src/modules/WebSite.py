@@ -16,13 +16,10 @@ else:
   print('Invalid ENV')
 
 class WebSite:
-  """
-  class for website model.
-  """
   def __init__(self):
     self._url = ''
 
-  async def get_screenshot_base64(self, url):
+  def get_screenshot_base64(self, url):
     self._url = url
     driver = self._get_driver()
     image = driver.get_screenshot_as_base64()
@@ -32,21 +29,28 @@ class WebSite:
   def _get_driver(self):
     options = Options()
 
-    # local
-    # options.binary_location = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+    is_dev = app.config['ENV'] == 'development'
+    is_prod = app.config['ENV'] == 'production'
 
-    # heroku
-    options.binary_location = '/app/.apt/usr/bin/google-chrome'
+    if is_dev:
+      options.binary_location = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+    elif is_prod:
+      options.binary_location = '/app/.apt/usr/bin/google-chrome'
+    else:
+      options.binary_location = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 
     options.add_argument('--headless')
 
-    # local
-    # driver_path = os.path.join(self._currentpath, ("../drivers/chromedriver"))
-    # driver = webdriver.Chrome(chrome_options=options, executable_path=driver_path)
+    if is_dev:
+      driver_path = os.path.join(os.path.dirname(__file__), ("../../drivers/chromedriver"))
+      driver = webdriver.Chrome(chrome_options=options, executable_path=driver_path)
+    elif is_prod:
+      options.add_argument('--disable-gpu')
+      driver = webdriver.Chrome(chrome_options=options)
+    else:
+      driver_path = os.path.join(self._currentpath, ("../drivers/chromedriver"))
+      driver = webdriver.Chrome(chrome_options=options, executable_path=driver_path)
 
-    # heroku
-    options.add_argument('--disable-gpu')
-    driver = webdriver.Chrome(chrome_options=options)
     driver.get(self._url )
 
     # get full page size

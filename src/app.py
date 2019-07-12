@@ -9,13 +9,13 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 if app.config['ENV'] == 'production':
   app.config.from_pyfile('configs/prod.cfg')
   from src.models import Image
+  from src.models import WebSite
   from src.modules import Colors
-  from src.modules import WebSite
 elif app.config['ENV'] == 'development':
   app.config.from_pyfile('configs/dev.cfg')
   from .models import Image
+  from .models import WebSite
   from .modules import Colors
-  from .modules import WebSite
   # use chrome_driver(ver74)
   import chromedriver_binary
 else:
@@ -32,15 +32,14 @@ def get_website_screenshot():
   """
   endpoint to get screenshot as base64.
   """
-  print(app.config['ENV'], file=sys.stderr)
   if request.method == 'GET':
     url = request.args.get('url')
     url = urllib.parse.unquote(url)
 
     webSite = WebSite()
-    webSite.get_screenshot_base64(url)
+    file_name = webSite.start_to_get_sceenshot(url)
 
-    return jsonify({'status': 'start'})
+    return jsonify({'file_name': file_name})
 
 @app.route('/api/image/colors', methods=['POST'])
 @cross_origin()

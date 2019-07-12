@@ -1,6 +1,8 @@
 import os
-from google.cloud import storage
+
 from flask import Flask
+
+from google.cloud import storage
 
 app = Flask(__name__)
 
@@ -11,10 +13,12 @@ elif app.config['ENV'] == 'development':
 else:
   print('Invalid ENV')
 
+
 class CloudStorage:
 
   def __init__(self, backet_name):
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.dirname(__file__) + '/../../' + app.config['FIREBASE_CRED_FILE']
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.dirname(
+        __file__) + '/../../' + app.config['FIREBASE_CRED_FILE']
 
     client = storage.Client()
     self.bucket = client.get_bucket(backet_name)
@@ -24,7 +28,7 @@ class CloudStorage:
     blob.upload_from_filename(filename=path)
 
   def upload_base64(self, file_name, base64):
-    self.upload(file_name, 'data:image/png;base64,'+base64)
+    self.upload(file_name, 'data:image/png;base64,' + base64)
 
   def list_files(self, options):
     if options:

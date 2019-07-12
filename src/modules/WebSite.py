@@ -1,19 +1,12 @@
+import os
+
 from flask import Flask
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import os, asyncio
 
 app = Flask(__name__)
 
-import os
-if app.config['ENV'] == 'production':
-  from src.modules import String
-elif app.config['ENV'] == 'development':
-  from . import String
-  # use chromedriver(ver74)
-  import chromedriver_binary
-else:
-  print('Invalid ENV')
 
 class WebSite:
   def __init__(self):
@@ -42,16 +35,20 @@ class WebSite:
     options.add_argument('--headless')
 
     if is_dev:
-      driver_path = os.path.join(os.path.dirname(__file__), ("../../drivers/chromedriver"))
-      driver = webdriver.Chrome(chrome_options=options, executable_path=driver_path)
+      driver_path = os.path.join(os.path.dirname(
+          __file__), ("../../drivers/chromedriver"))
+      driver = webdriver.Chrome(
+          chrome_options=options, executable_path=driver_path)
     elif is_prod:
       options.add_argument('--disable-gpu')
       driver = webdriver.Chrome(chrome_options=options)
     else:
-      driver_path = os.path.join(self._currentpath, ("../drivers/chromedriver"))
-      driver = webdriver.Chrome(chrome_options=options, executable_path=driver_path)
+      driver_path = os.path.join(
+          self._currentpath, ("../drivers/chromedriver"))
+      driver = webdriver.Chrome(
+          chrome_options=options, executable_path=driver_path)
 
-    driver.get(self._url )
+    driver.get(self._url)
 
     # get full page size
     page_width = driver.execute_script('return document.body.scrollWidth')

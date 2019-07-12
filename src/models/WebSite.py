@@ -1,7 +1,8 @@
-from flask import Flask
+import tempfile
+
 from cv2 import cv2
-from uuid import uuid4
-import datetime, base64, tempfile, numpy as np
+
+from flask import Flask
 
 app = Flask(__name__)
 
@@ -21,10 +22,9 @@ elif app.config['ENV'] == 'development':
   from ..modules import CloudStorage
   from ..modules import DateTime
   from ..modules import WebSite as WebSiteModule
-  # use chromedriver(ver74)
-  import chromedriver_binary
 else:
   print('Invalid ENV')
+
 
 class WebSite:
   def __init__(self):
@@ -55,7 +55,6 @@ class WebSite:
 
     img = imageModule.base64_to_ndarray(img_base64)
     img_resize = imageModule.resize(img, 0.15)
-
 
     with tempfile.TemporaryDirectory() as temp_path:
       path = temp_path + '/screenshot.png'

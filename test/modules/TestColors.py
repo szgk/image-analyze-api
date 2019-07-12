@@ -1,8 +1,11 @@
+import os
+import sys
 import unittest
-import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
-from src.modules import Colors
+
 from src.Constants import COLOR_NAMES
+from src.modules import Colors
+
 
 class TestColors(unittest.TestCase):
 
@@ -13,12 +16,12 @@ class TestColors(unittest.TestCase):
   def test_get_hue_from_RGB(self):
     actuals = []
     testRGB = [
-      [255, 0, 0],
-      [255, 255, 0],
-      [0, 255, 0],
-      [0, 255, 255],
-      [0, 0, 255],
-      [255, 0, 0],
+        [255, 0, 0],
+        [255, 255, 0],
+        [0, 255, 0],
+        [0, 255, 255],
+        [0, 0, 255],
+        [255, 0, 0],
     ]
 
     for i in range(0, 6):
@@ -41,7 +44,7 @@ class TestColors(unittest.TestCase):
   def test_get_RGB_from_hue(self):
     actuals = []
     for i in range(0, 6):
-      deg = i*60
+      deg = i * 60
       res = self.colors.get_RGB_from_hue(deg if 0 < deg < 360 else 0)
       actuals.append(res)
 
@@ -59,29 +62,30 @@ class TestColors(unittest.TestCase):
     self.assertEqual(expected5, actuals[4])
     self.assertEqual(expected6, actuals[5])
 
-
   def test_get_name_from_hue(self):
     actuals = []
     for i in range(0, 12):
-      actuals.append(self.colors.get_name_from_hue(i*30+1 if 0 < i*30 < 360 else 0))
+      actuals.append(self.colors.get_name_from_hue(
+          i * 30 + 1 if 0 < i * 30 < 360 else 0))
 
     expecteds = [
-      COLOR_NAMES.R,
-      COLOR_NAMES.O,
-      COLOR_NAMES.Y,
-      COLOR_NAMES.YG,
-      COLOR_NAMES.G,
-      COLOR_NAMES.BG,
-      COLOR_NAMES.B,
-      COLOR_NAMES.DB,
-      COLOR_NAMES.DeB,
-      COLOR_NAMES.BV,
-      COLOR_NAMES.V,
-      COLOR_NAMES.RV,
+        COLOR_NAMES.R,
+        COLOR_NAMES.O,
+        COLOR_NAMES.Y,
+        COLOR_NAMES.YG,
+        COLOR_NAMES.G,
+        COLOR_NAMES.BG,
+        COLOR_NAMES.B,
+        COLOR_NAMES.DB,
+        COLOR_NAMES.DeB,
+        COLOR_NAMES.BV,
+        COLOR_NAMES.V,
+        COLOR_NAMES.RV,
     ]
 
     for i in range(len(expecteds)):
       self.assertEqual(expecteds[i], actuals[i])
+
 
 if __name__ == "__main__":
   unittest.main()

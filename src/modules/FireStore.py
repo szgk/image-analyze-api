@@ -1,8 +1,11 @@
-from flask import Flask
+"""modules about firebase firestore."""
 import os
+
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+
+from flask import Flask
 
 app = Flask(__name__)
 
@@ -13,10 +16,11 @@ elif app.config['ENV'] == 'development':
 else:
   print('Invalid ENV')
 
+
 class FireStore:
-  
   def connect(self):
-    cred_path = os.path.dirname(__file__) + '/../../' + app.config['FIREBASE_CRED_FILE']
+    cred_path = os.path.dirname(
+        __file__) + '/../../' + app.config['FIREBASE_CRED_FILE']
 
     cred = credentials.Certificate(cred_path)
     firebase_admin.initialize_app(cred)

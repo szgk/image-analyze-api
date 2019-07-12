@@ -1,0 +1,5 @@
+[flake8]
+ignore=E111, E114, E402, E501
+filename=./src/**/*.py, ./test/**/*.py
+exclude=__init__.py
+max-line-length=120

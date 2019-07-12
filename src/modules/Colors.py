@@ -1,22 +1,23 @@
+import collections
+import math
+
 from flask import Flask
-import collections, math
 
 app = Flask(__name__)
 
-import os
 if app.config['ENV'] == 'production':
-  from src.modules.Image import Image
   from src.Constants import COLOR_NAMES
 elif app.config['ENV'] == 'development':
-  from .Image import Image
   from ..Constants import COLOR_NAMES
 else:
   print('Invalid ENV')
+
 
 class Colors():
   """
   class for image color.
   """
+
   def __init__(self):
     self._all_colors = []
 
@@ -29,7 +30,7 @@ class Colors():
 
     color_counts_dict = collections.Counter(pixel_str_list)
     # get ordered colors from dict
-    order_list =  collections.OrderedDict(color_counts_dict)
+    order_list = collections.OrderedDict(color_counts_dict)
 
     # sort by value
     sorted_list = sorted(order_list.items(), reverse=True, key=lambda x: x[1])
@@ -41,7 +42,7 @@ class Colors():
     get RGB params(ex. [255,255,255]) from hue degree.
     """
     mx = 255
-    r,g,b = 0,0,0
+    r, g, b = 0, 0, 0
 
     if hue is None or hue < 0:
       raise TypeError('invalid value')
@@ -65,8 +66,8 @@ class Colors():
       r = mx
       b = math.floor((360 - hue) / 60 * mx)
 
-    [r,g,b] = map(lambda n: n if 0 <= n <= 255 else 0, [r,g,b])
-      
+    [r, g, b] = map(lambda n: n if 0 <= n <= 255 else 0, [r, g, b])
+
     return [r, g, b]
 
   def get_hue_from_RGB(self, rgb):
@@ -76,7 +77,7 @@ class Colors():
     hue = 0
     mx = max(rgb)
     mn = min(rgb)
-    [r,g,b] = rgb
+    [r, g, b] = rgb
 
     if r == mx:
       hue = 60 * (g - b / (mx - mn))

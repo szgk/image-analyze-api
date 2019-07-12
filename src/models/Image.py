@@ -1,20 +1,22 @@
+import os
+
 from flask import Flask
+
 app = Flask(__name__)
 
-import os
 if app.config['ENV'] == 'production':
   from src.modules.Image import Image as ImageModule
-  from src.modules.Colors import Colors
 elif app.config['ENV'] == 'development':
   from ..modules import Image as ImageModule
-  from ..modules import Colors
 else:
   print('Invalid ENV')
+
 
 class Image:
   """
   class for image model.
   """
+
   def __init__(self, img, path):
     self._img = img
     self._currentpath = path
@@ -27,7 +29,8 @@ class Image:
     """
     image = ImageModule(self._img_path)
 
-    resizePath = os.path.join(self._currentpath, '../../public/img/' + '0.15' + self._img_filename)
+    resizePath = os.path.join(
+        self._currentpath, '../../public/img/' + '0.15' + self._img_filename)
 
     if (not os.path.isfile(resizePath)):
       image.resize(0.15)

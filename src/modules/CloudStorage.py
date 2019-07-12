@@ -26,5 +26,10 @@ class CloudStorage:
   def upload_base64(self, file_name, base64):
     self.upload(file_name, 'data:image/png;base64,'+base64)
 
-  def list_file(self):
-    return self.bucket.list_blobs()
+  def list_files(self, options):
+    if options:
+      files = self.bucket.list_blobs(**options)
+    else:
+      files = self.bucket.list_blobs()
+
+    return files

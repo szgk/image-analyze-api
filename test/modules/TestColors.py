@@ -1,7 +1,7 @@
 import unittest
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
-from src.modules.Colors import Colors
+from src.modules import Colors
 from src.Constants import COLOR_NAMES
 
 class TestColors(unittest.TestCase):

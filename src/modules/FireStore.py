@@ -14,8 +14,6 @@ else:
   print('Invalid ENV')
 
 class FireStore:
-  def __init__(self):
-    return None
   
   def connect(self):
     cred_path = os.path.dirname(__file__) + '/../../' + app.config['FIREBASE_CRED_FILE']

@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, redirect, jsonify, make_response
+import json
+import urllib
+
+from flask import Flask, jsonify, request
+
 from flask_cors import CORS, cross_origin
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import os, datetime, json, urllib, sys
+
+
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -16,15 +19,15 @@ elif app.config['ENV'] == 'development':
   from .models import Image
   from .models import WebSite
   from .modules import Colors
-  # use chrome_driver(ver74)
-  import chromedriver_binary
 else:
   print('Invalid ENV')
+
 
 @app.route('/', methods=['GET'])
 @cross_origin()
 def hello():
-    return 'hello'
+  return 'hello'
+
 
 @app.route('/api/website/screenshot', methods=['GET'])
 @cross_origin()
@@ -41,13 +44,14 @@ def get_website_screenshot():
 
     return jsonify({'file_name': file_name})
 
-@app.route('/api/image/colors', methods=['POST'])
+
+@app.route('/api/image/colors', methods=['GET'])
 @cross_origin()
 def get_image_colors():
   """
   return all colors
   """
-  if request.method == 'POST':
+  if request.method == 'GET':
     img = json.loads(request.data)['img']
 
     image = Image(img, app.root_path)
@@ -57,6 +61,7 @@ def get_image_colors():
     sorted_colors_list = colors.sort_colors_list(image_colors)
 
     return jsonify(sorted_colors_list)
+
 
 if __name__ == "__main__":
   app.run(debug=True)

@@ -1,4 +1,3 @@
-import json
 import urllib
 
 from flask import Flask, jsonify, request
@@ -11,14 +10,12 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 if app.config['ENV'] == 'production':
   app.config.from_pyfile('configs/prod.cfg')
-  from src.models import Image
+  from src.modules import Image
   from src.models import WebSite
-  from src.modules import Colors
 elif app.config['ENV'] == 'development':
   app.config.from_pyfile('configs/dev.cfg')
-  from .models import Image
+  from .modules import Image
   from .models import WebSite
-  from .modules import Colors
 else:
   print('Invalid ENV')
 
@@ -52,15 +49,11 @@ def get_image_colors():
   return all colors
   """
   if request.method == 'GET':
-    img = json.loads(request.data)['img']
+    base64 = request.args.get('base64')
+    image = Image(img_base64=base64)
+    colors = image.get_img_colors()
 
-    image = Image(img, app.root_path)
-    image_colors = image.save_all_colors()
-
-    colors = Colors()
-    sorted_colors_list = colors.sort_colors_list(image_colors)
-
-    return jsonify(sorted_colors_list)
+    return jsonify({"colors": colors})
 
 
 if __name__ == "__main__":

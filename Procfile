@@ -1,1 +1,1 @@
-web gunicorn --chdir src app:app --log-file -
+web gunicorn --chdir src app:app --limit-request-line 8190 --log-file -

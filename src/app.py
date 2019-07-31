@@ -1,3 +1,4 @@
+import json
 import urllib
 
 from flask import Flask, jsonify, request
@@ -11,11 +12,9 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 if app.config['ENV'] == 'production':
   app.config.from_pyfile('configs/prod.cfg')
   from src.modules import Image
-  from src.models import WebSite
 elif app.config['ENV'] == 'development':
   app.config.from_pyfile('configs/dev.cfg')
   from .modules import Image
-  from .models import WebSite
 else:
   print('Invalid ENV')
 
@@ -26,33 +25,19 @@ def hello():
   return 'hello'
 
 
-@app.route('/api/website/screenshot', methods=['GET'])
+@app.route('/api/image/colors', methods=['POST'])
 @cross_origin()
-def get_website_screenshot():
-  """
-  endpoint to get screenshot as base64.
-  """
-  if request.method == 'GET':
-    url = request.args.get('url')
-    url = urllib.parse.unquote(url)
-
-    webSite = WebSite()
-    file_name = webSite.start_to_get_sceenshot(url)
-
-    return jsonify({'file_name': file_name})
-
-
-@app.route('/api/image/colors', methods=['GET'])
-@cross_origin()
-def get_image_colors():
+def post_image():
   """
   return all colors
   """
-  if request.method == 'GET':
-    base64 = request.args.get('base64')
-    image = Image(img_base64=base64)
+  if request.method == 'POST':
+    param_str = request.data.decode()
+    param = json.loads(param_str)
+    base64 = param['base64']
+    img = urllib.parse.unquote(base64)
+    image = Image(img_base64=img)
     colors = image.get_img_colors()
-
     return jsonify({"colors": colors})
 
 

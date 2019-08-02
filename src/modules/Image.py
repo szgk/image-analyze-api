@@ -96,3 +96,6 @@ class Image:
 
   def resize(self, img, num):
     return cv2.resize(img, (int(img.shape[1] * num), int(img.shape[0] * num)))
+
+  def get_img_layout(self):
+    return 'layoutoo'

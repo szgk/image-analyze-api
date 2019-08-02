@@ -15,16 +15,23 @@ class Image:
   class for image model.
   """
 
-  def __init__(self, img_path):
-    self._img_path = img_path
-
-  def get_desc_color_list(self):
+  def get_colors_by_base64(self, base64):
     """
     save all image's colors in DB.
     """
-    image = ImageModule(self._img_path)
+    image = ImageModule(img_base64=base64)
 
     img_colors = image.get_img_colors()
 
     return img_colors
+
+  def get_layout_by_base64(self, base64):
+    """
+    save all image's colors in DB.
+    """
+    image = ImageModule(img_base64=base64)
+
+    layout = image.get_img_layout()
+
+    return layout
     # implement code to save colors to DB

@@ -11,11 +11,11 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 if app.config['ENV'] == 'production':
   app.config.from_pyfile('configs/prod.cfg')
-  from src.modules import Image
+  from src.models import Image
   from src.modules import Validator
 elif app.config['ENV'] == 'development':
   app.config.from_pyfile('configs/dev.cfg')
-  from .modules import Image
+  from .models import Image
   from .modules import Validator
 else:
   print('Invalid ENV')
@@ -40,20 +40,31 @@ def hello():
   return 'hello'
 
 
-@app.route('/api/image/colors', methods=['POST'])
+@app.route('/api/image/<resource>', methods=['POST'])
 @cross_origin()
-def post_image():
-  """
-  return all colors
-  """
-  if request.method == 'POST':
-    param_str = request.data.decode()
-    param = json.loads(param_str)
-    base64 = param['base64']
-    img = urllib.parse.unquote(base64)
-    image = Image(img_base64=img)
-    colors = image.get_img_colors()
+def post_image(resource=None):
+  param_str = request.data.decode()
+  param = json.loads(param_str)
+  encoded_base64 = param['base64']
+  base64 = urllib.parse.unquote(encoded_base64)
+  image = Image()
+
+  if(resource == 'colors'):
+    """
+    return all colors
+    """
+    colors = image.get_colors_by_base64(base64)
     return jsonify({"colors": colors})
+
+  elif(resource == 'layout'):
+    """
+    return layout image
+    """
+    layout = image.get_layout_by_base64(base64)
+    return jsonify({"layout": layout})
+
+  else:
+    abort(404, 'Invalid param')
 
 
 if __name__ == "__main__":

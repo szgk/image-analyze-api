@@ -11,6 +11,9 @@ class CheckReferer:
     self.patterns = ['localhost:9000', 'szgk.github.io']
 
   def is_valid(self):
+    if(not self.ref):
+      return False
+
     _ref = re.sub(r'https?:\/\/', '', self.ref)
     domain = _ref.split('/')[0]
 

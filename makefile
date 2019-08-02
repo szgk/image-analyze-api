@@ -20,3 +20,4 @@ driver:
 test_unit:
 	python test/modules/TestColors.py
 	python test/modules/TestDateTime.py
+	python test/modules/TestValidator.py

@@ -32,6 +32,8 @@ def post_image():
   return all colors
   """
   if request.method == 'POST':
+    referrer = request.headers.get("Referer")
+    print('referrer', referrer)
     param_str = request.data.decode()
     param = json.loads(param_str)
     base64 = param['base64']

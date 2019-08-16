@@ -28,9 +28,9 @@ class TestColors(unittest.TestCase):
       actuals.append(self.colors.get_hue_from_RGB(testRGB[i]))
 
     expected1 = 0
-    expected2 = 180
+    expected2 = 60
     expected3 = 120
-    expected4 = 300
+    expected4 = 180
     expected5 = 240
     expected6 = 0
 
@@ -85,6 +85,38 @@ class TestColors(unittest.TestCase):
 
     for i in range(len(expecteds)):
       self.assertEqual(expecteds[i], actuals[i])
+
+  def test_in_range(self):
+    expected1 = True
+    actual1 = self.colors.in_range(2, 1, 3)
+    expected2 = False
+    actual2 = self.colors.in_range(3, 1, 1)
+    expected3 = False
+    actual3 = self.colors.in_range(3, 1, 0)
+    expected4 = True
+    actual4 = self.colors.in_range(3, 5, 10)
+    self.assertEqual(expected1, actual1)
+    self.assertEqual(expected2, actual2)
+    self.assertEqual(expected3, actual3)
+    self.assertEqual(expected4, actual4)
+
+  def test_is_grey_RGB(self):
+    expected1 = True
+    actual1 = self.colors.is_grey_RGB([200, 201, 210])
+    expected2 = False
+    actual2 = self.colors.is_grey_RGB([100, 0, 0])
+
+    self.assertEqual(expected1, actual1)
+    self.assertEqual(expected2, actual2)
+
+  def test_is_similer_RGB(self):
+    expected1 = True
+    actual1 = self.colors.is_similer_RGB([200, 200, 210], [210, 190, 200])
+    expected2 = False
+    actual2 = self.colors.is_similer_RGB([200, 180, 31], [200, 180, 20])
+
+    self.assertEqual(expected1, actual1)
+    self.assertEqual(expected2, actual2)
 
 
 if __name__ == "__main__":

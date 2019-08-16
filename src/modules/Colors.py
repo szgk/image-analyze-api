@@ -1,5 +1,6 @@
 import collections
 import math
+from decimal import Decimal, ROUND_HALF_UP
 
 from flask import Flask
 
@@ -71,25 +72,26 @@ class Colors():
     return [r, g, b]
 
   def get_hue_from_RGB(self, rgb):
-    """
-    get hue degree from RGB params(ex. [255,255,255]).
-    """
     hue = 0
     mx = max(rgb)
     mn = min(rgb)
     [r, g, b] = rgb
 
-    if r == mx:
-      hue = 60 * (g - b / (mx - mn))
-    elif g == mx:
-      hue = 60 * (b - r / (mx - mn)) + 120
-    elif b == mx:
-      hue = 60 * (r - g / (mx - mn)) + 240
+    if (r == mx):
+      hue = 60 * ((g - b) / (mx - mn))
 
-    if hue > 360:
+    elif (g == mx):
+      hue = 60 * ((b - r) / (mx - mn)) + 120
+    elif(b == mx):
+      hue = 60 * ((r - g) / (mx - mn)) + 240
+
+    if (hue > 360):
       hue %= 360
 
-    return math.floor(hue)
+    if (hue < 0):
+      hue += 360
+
+    return int(Decimal(str(hue)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
 
   def get_name_from_hue(self, hue):
     if 0 <= hue <= 30:
@@ -116,3 +118,31 @@ class Colors():
       return COLOR_NAMES.V
     elif 330 < hue <= 360:
       return COLOR_NAMES.RV
+
+  def is_similer_RGB(self, rgb1, rgb2, rng=10):
+    [r1, g1, b1] = rgb1
+    [r2, g2, b2] = rgb2
+
+    return self.in_range(r1, r2, rng) and self.in_range(g1, g2, rng) and self.in_range(b1, b2, rng)
+
+  def is_grey_RGB(self, rgb, rng=10):
+    [r, g, b] = rgb
+    avarage = sum(rgb) / len(rgb)
+
+    return self.in_range(avarage, r, rng) and self.in_range(avarage, g, rng) and self.in_range(avarage, b, rng)
+
+  def in_range(self, num1, num2, rng):
+    num1Exist = not num1 and not (num1 == 0)
+    num2Exist = not num2 and not (num2 == 0)
+
+    if (not num1Exist and num2Exist):
+      return False
+    if (num1Exist and not num2Exist):
+      return False
+    if (num1 == num2):
+      return True
+
+    diff = num1 - num2
+
+    abst = abs(diff)
+    return abst <= rng

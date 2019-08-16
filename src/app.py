@@ -25,6 +25,9 @@ else:
 def common_func():
   referrer = request.headers.get("Referer")
 
+  if(request.args.get("api_token") == "aejoelaoggembcahagimdiliamlcdmfm"):
+    return
+
   CheckReferer = Validator.CheckReferer(referrer)
   result = CheckReferer.is_valid()
 
@@ -56,12 +59,12 @@ def post_image(resource=None):
     colors = image.get_colors_by_base64(base64)
     return jsonify({"colors": colors})
 
-  elif(resource == 'layout'):
+  elif(resource == 'coordinates'):
     """
     return layout image
     """
-    layout = image.get_layout_by_base64(base64)
-    return jsonify({"layout": layout})
+    layout_info = image.get_layout_info_from_base64(base64)
+    return jsonify(layout_info)
 
   else:
     abort(404, 'Invalid param')

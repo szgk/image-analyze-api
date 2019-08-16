@@ -25,13 +25,13 @@ class Image:
 
     return img_colors
 
-  def get_layout_by_base64(self, base64):
+  def get_layout_info_from_base64(self, base64):
     """
     save all image's colors in DB.
     """
     image = ImageModule(img_base64=base64)
 
-    layout = image.get_img_layout()
+    get_layout_info = image.get_layout_info()
 
-    return layout
+    return {'resize_img': get_layout_info}
     # implement code to save colors to DB

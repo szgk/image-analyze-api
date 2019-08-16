@@ -5,14 +5,9 @@ import tempfile
 
 from cv2 import cv2
 
-from flask import Flask
-
 import numpy as np
 
 import requests
-
-
-app = Flask(__name__)
 
 
 class Image:
@@ -35,7 +30,7 @@ class Image:
     """
     if len(img) <= 0:
       img = self.img
-    if self.img is None or len(self.img) <= 0:
+    if self.img is None or len(img) <= 0:
       return []
 
     height, width = img.shape[:2]
@@ -94,8 +89,32 @@ class Image:
 
     return img
 
-  def resize(self, img, num):
-    return cv2.resize(img, (int(img.shape[1] * num), int(img.shape[0] * num)))
+  def get_layout_info(self):
+    resize_img = self._get_resize_with_range()
 
-  def get_img_layout(self):
-    return 'layoutoo'
+    return resize_img.tolist()
+
+  def _get_resize_with_range(self, rng=30000):
+    y = len(self.img)
+    x = len(self.img[0])
+
+    # if(rng > orgPixels):
+    #   return self.img
+    raito = x / y
+    square = rng / raito
+    resizeY = int(round(np.sqrt(square)))
+    resizeX = int(round(x * (resizeY / y)))
+
+    resize_img = cv2.resize(self.img, (resizeX, resizeY))
+
+    return resize_img
+
+  def _has_adjoin_pixel(self, coordinate_list, target_coordinate):
+    # 隣接する座標を取得
+    res = False
+    for col in coordinate_list:
+      if 1 >= abs(col[0] - target_coordinate[0]):
+        res = True
+        break
+
+    return res

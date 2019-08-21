@@ -31,7 +31,7 @@ class Image:
     """
     image = ImageModule(img_base64=base64)
 
-    get_layout_info = image.get_layout_info()
+    info = image.get_layout_info()
 
-    return {'resize_img': get_layout_info}
+    return {'resize_img': info['resize_img'], 'base64str': info['base64str']}
     # implement code to save colors to DB

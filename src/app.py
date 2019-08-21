@@ -66,6 +66,13 @@ def post_image(resource=None):
     layout_info = image.get_layout_info_from_base64(base64)
     return jsonify(layout_info)
 
+  elif(resource == 'layout'):
+    """
+    return layout image
+    """
+    print(base64)
+    return jsonify({})
+
   else:
     abort(404, 'Invalid param')
 

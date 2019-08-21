@@ -7,8 +7,6 @@ from cv2 import cv2
 
 import numpy as np
 
-import requests
-
 
 class Image:
   """
@@ -68,16 +66,6 @@ class Image:
     gbr_list[0], gbr_list[2] = gbr_list[2], gbr_list[0]
     return gbr_list
 
-  def _imread_web(self, img_url):
-    res = requests.get(img_url)
-    img = None
-
-    with tempfile.NamedTemporaryFile(dir='./') as fp:
-      fp.write(res.content)
-      fp.file.seek(0)
-      img = cv2.imread(fp.name)
-    return img
-
   def base64_to_ndarray(self, img_base64):
     img = base64.b64decode(img_base64)
     img_np = np.fromstring(img, np.uint8)
@@ -90,13 +78,38 @@ class Image:
     return img
 
   def get_layout_info(self):
-    resize_img = self._get_resize_with_range()
 
-    return resize_img.tolist()
+    gray_img = self._change_to_gray_scale(self.img)
+    thresh_img = self._get_2color_img(gray_img)
+    rgb_img = self._change_to_rgb(thresh_img)
+    resize_img = self._get_resize_with_range(rgb_img)
+    base64str = self._get_base64_from_cv2_img(resize_img)
 
-  def _get_resize_with_range(self, rng=30000):
-    y = len(self.img)
-    x = len(self.img[0])
+    return {'resize_img': resize_img.tolist(), 'base64str': base64str}
+
+  def _get_2color_img(self, img, thresholod=120):
+    # cv2の画像を2値化する
+    # ref: https://qiita.com/tokkuri/items/ad5e858cbff8159829e9
+
+    # thresholodを超えた画素を255に
+    ret, thresh_img = cv2.threshold(img, thresholod, 255, cv2.THRESH_BINARY)
+
+    return thresh_img
+
+  def _get_base64_from_cv2_img(self, img):
+    # cv2の画像からbase64を取得する
+    base64str = ''
+    with tempfile.TemporaryDirectory() as dirname:
+      filepath = dirname + 'temp.png'
+      cv2.imwrite(filepath, img)
+      base64str = base64.encodestring(
+          open(filepath, 'rb').read()).decode('utf-8')
+
+    return base64str
+
+  def _get_resize_with_range(self, img, rng=30000):
+    y = len(img)
+    x = len(img[0])
 
     # if(rng > orgPixels):
     #   return self.img
@@ -105,16 +118,16 @@ class Image:
     resizeY = int(round(np.sqrt(square)))
     resizeX = int(round(x * (resizeY / y)))
 
-    resize_img = cv2.resize(self.img, (resizeX, resizeY))
+    resize_img = cv2.resize(img, (resizeX, resizeY))
 
     return resize_img
 
-  def _has_adjoin_pixel(self, coordinate_list, target_coordinate):
-    # 隣接する座標を取得
-    res = False
-    for col in coordinate_list:
-      if 1 >= abs(col[0] - target_coordinate[0]):
-        res = True
-        break
+  def _change_to_gray_scale(self, img):
+    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    return res
+    return gray_img
+
+  def _change_to_rgb(self, img):
+    rgb_img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+
+    return rgb_img
